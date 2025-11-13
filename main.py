@@ -15,7 +15,7 @@ from bson import ObjectId
 # Environment variables
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
 DB_NAME = os.getenv("DB_NAME", "assignmentdb")
-JWT_SECRET = os.getenv("JWT_SECRET", "your-secret-key-change-in-production")
+JWT_SECRET = os.getenv("JWT_SECRET", "aizada100ballmozhnopozhalusta")
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRATION_HOURS = 24
 
