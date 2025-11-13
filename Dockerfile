@@ -1,8 +1,10 @@
+# Base image
 FROM python:3.11-slim
 
+# Set working directory to /app
 WORKDIR /app
 
-# Install system certificates (REQUIRED for MongoDB Atlas SSL)
+# Install system dependencies for MongoDB SSL
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates openssl && \
     update-ca-certificates && \
@@ -12,11 +14,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
-COPY . .
+# Copy the app folder
+COPY app ./app
 
-# Expose port
+# Expose port for FastAPI
 EXPOSE 8000
 
-# Run the application
+# Run FastAPI with uvicorn
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
