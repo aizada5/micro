@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:6.0
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: assignmentdb
+    volumes:
+      - mongo_data:/data/db
+
+  fastapi:
+    build: .
+    container_name: user-service
+    ports:
+      - "8000:8000"
+    environment:
+      MONGO_URI: "mongodb://mongo:27017"
+      DB_NAME: "assignmentdb"
+      JWT_SECRET: "your-secret-key-change-in-production"
+    depends_on:
+      - mongo
+
+volumes:
+  mongo_data:
