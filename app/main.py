@@ -13,7 +13,7 @@ import os
 from bson import ObjectId
 
 # Environment variables
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
+MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://u22ayzada_db_user:< X0sx6DSE1ASVM90i >@clusteraizada.t0yilnj.mongodb.net/?appName=ClusterAizada")
 DB_NAME = os.getenv("DB_NAME", "assignmentdb")
 JWT_SECRET = os.getenv("JWT_SECRET", "aizada100ballmozhnopozhalusta")
 JWT_ALGORITHM = "HS256"
