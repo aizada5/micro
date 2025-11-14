@@ -13,9 +13,9 @@ import os
 from bson import ObjectId
 
 # Environment variables
-MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://u22ayzada_db_user:< X0sx6DSE1ASVM90i >@clusteraizada.t0yilnj.mongodb.net/?appName=ClusterAizada")
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
 DB_NAME = os.getenv("DB_NAME", "assignmentdb")
-JWT_SECRET = os.getenv("JWT_SECRET", "aizada100ballmozhnopozhalusta")
+JWT_SECRET = os.getenv("JWT_SECRET", "your-secret-key-change-in-production")
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRATION_HOURS = 24
 
@@ -31,8 +31,12 @@ client = AsyncIOMotorClient(MONGO_URI)
 db = client[DB_NAME]
 users_collection = db["users"]
 
-# Password hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Password hashing (with truncation to avoid bcrypt 72-byte limit)
+pwd_context = CryptContext(
+    schemes=["bcrypt"],
+    deprecated="auto",
+    bcrypt__truncate_error=True
+)
 
 # Security
 security = HTTPBearer()
@@ -69,9 +73,15 @@ class QRCodeResponse(BaseModel):
 
 # Helper functions
 def hash_password(password: str) -> str:
+    # Truncate password to 72 bytes for bcrypt compatibility
+    if len(password.encode('utf-8')) > 72:
+        password = password[:72]
     return pwd_context.hash(password)
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
+    # Truncate password to 72 bytes for bcrypt compatibility
+    if len(plain_password.encode('utf-8')) > 72:
+        plain_password = plain_password[:72]
     return pwd_context.verify(plain_password, hashed_password)
 
 def create_access_token(data: dict) -> str:
